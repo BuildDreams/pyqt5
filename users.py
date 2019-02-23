@@ -8,7 +8,9 @@
 import json
 import re
 import time
-
+from memory_pic import jpg_4
+from memory_pic import jpg_5
+from memory_pic import mg_ico
 import requests
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer, QDateTime
@@ -19,10 +21,20 @@ import os
 import sys
 import base64
 import random
-from urllib import parse
 
 
 
+
+def get_pic(pic_code, pic_name):
+    image = open(pic_name, 'wb')
+    image.write(base64.b64decode(pic_code))
+    image.close()
+    return image
+img = get_pic(jpg_4, '01-4.jpg')
+# 在这里使用图片 icon.ico
+
+img2 = get_pic(jpg_5, '01-5.jpg')
+img_3 =get_pic(mg_ico, 'mg.ico')
 
 
 
@@ -32,7 +44,7 @@ class Ui_Dialog(QWidget):
 # --------------------------ui模块--------------------------------------------------
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(720, 700)
+        Dialog.resize(1000, 900)
 
 
         self.msgBox = QMessageBox()#创建弹出框
@@ -66,28 +78,28 @@ class Ui_Dialog(QWidget):
         self.str_base.setObjectName("pushButton_5")
 
         self.textBrowser = QtWidgets.QTextBrowser(Dialog)
-        self.textBrowser.setGeometry(QtCore.QRect(480, 0, 256, 192))
-        self.textBrowser.setObjectName("textBrowser")
+        self.textBrowser.setGeometry(QtCore.QRect(700, 0, 256, 192))
+        self.textBrowser.setObjectName("textBrowser")#ip栏
 
         self.textBrowser_2 = QtWidgets.QTextBrowser(Dialog)
-        self.textBrowser_2.setGeometry(QtCore.QRect(0, 80, 100, 111))
+        self.textBrowser_2.setGeometry(QtCore.QRect(0, 80, 100, 200))
         self.textBrowser_2.setObjectName("textBrowser_2")#温度
 
         self.textBrowser_4 = QtWidgets.QTextBrowser(Dialog)
-        self.textBrowser_4.setGeometry(QtCore.QRect(110, 110, 430,111))
+        self.textBrowser_4.setGeometry(QtCore.QRect(110, 110, 630,111))
         self.textBrowser_4.setObjectName("textBrowser_4")#符号
 
         self.textBrowser_5 = QtWidgets.QTextBrowser(Dialog)
-        self.textBrowser_5.setGeometry(QtCore.QRect(90, 80, 41, 41))
-        self.textBrowser_5.setObjectName("textBrowser_5")#风向
+        self.textBrowser_5.setGeometry(QtCore.QRect(75, 80, 41, 41))
+        self.textBrowser_5.setObjectName("textBrowser_5")#温度符号
 
         self.textBrowser_6 = QtWidgets.QTextBrowser(Dialog)
-        self.textBrowser_6.setGeometry(QtCore.QRect(70, 160, 420, 50))
+        self.textBrowser_6.setGeometry(QtCore.QRect(70, 160, 700, 50))
         self.textBrowser_6.setObjectName("textBrowser_6")  # 风向
 
         self.auth = QtWidgets.QPushButton(Dialog)
-        self.auth.setGeometry(QtCore.QRect(360, 600, 150, 40))
-        self.auth.setObjectName("auth")
+        self.auth.setGeometry(QtCore.QRect(600, 120, 150, 40))
+        self.auth.setObjectName("auth")#作者蓝
 
         self.texttime = QtWidgets.QTextBrowser(Dialog)
         self.texttime.setGeometry(QtCore.QRect(280, 40, 200, 50))
@@ -96,12 +108,27 @@ class Ui_Dialog(QWidget):
         self.texttime.setStyleSheet('background:transparent;border-width:0;border-style:outset;color:#00008B')
 
         self.wx = QtWidgets.QLabel(Dialog)
-        self.wx.setGeometry(QtCore.QRect(500, 530, 150, 150))
+        self.wx.setGeometry(QtCore.QRect(780, 90, 150, 150))
 
 
-        jpg = QPixmap(r'C:\Users\zq\Desktop\Project\ceshi\01-5.jpg').scaled(self.wx.width(), self.wx.height())
+        jpg = QPixmap('01-5.jpg').scaled(self.wx.width(), self.wx.height())
         self.wx.setPixmap(jpg)
         self.wx.setStyleSheet('background:transparent;border-width:0;border-style:outset;')
+#---------------------------文本比较模块----------------------------------------
+        self.cmptext1 = QtWidgets.QTextEdit(Dialog)
+        self.cmptext1.setGeometry(QtCore.QRect(20, 350, 411, 511))
+        self.cmptext1.setObjectName("cmptext1")
+
+        self.cmptext2 = QtWidgets.QTextEdit(Dialog)
+        self.cmptext2.setGeometry(QtCore.QRect(540, 350, 411, 511))
+        self.cmptext2.setObjectName("cmptext2")
+
+        self.cmps = QtWidgets.QPushButton(Dialog)
+        self.cmps.setGeometry(QtCore.QRect(440, 600, 93, 28))
+        self.cmps.setObjectName("cmps")
+
+
+
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.retranslateUi(Dialog)
@@ -110,10 +137,10 @@ class Ui_Dialog(QWidget):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "小工具"))
-        Dialog.setWindowIcon(QIcon(r'C:\Users\zq\Desktop\Project\ico\ooopic_1548575135.ico'))
+        Dialog.setWindowIcon(QIcon('mg.ico'))
         palette = QPalette()
         palette.setBrush(QPalette.Background, QBrush(
-            QPixmap(r"C:\Users\zq\Desktop\Project\ceshi\01-4.jpg").scaled(Dialog.width(), Dialog.height())))
+            QPixmap('01-4.jpg').scaled(Dialog.width(), Dialog.height())))
         Dialog.setPalette(palette)
 
         self.mongo.setText(_translate("Dialog", "启动mongo"))
@@ -132,13 +159,21 @@ class Ui_Dialog(QWidget):
         self.str_base.setText(_translate("Dialog", "转码base64"))
         self.str_base.clicked.connect(self.str_b64)
 
+        self.cmps.setText(_translate("Dialog", "比较"))
+        self.cmps.clicked.connect(self.cmp_text)
 
+
+        self.cmps.setStyleSheet('QPushButton{background-Color:#00FFFF}')
         self.jupy.setStyleSheet('QPushButton{background-Color:#00FA9A}')
         self.mongo.setStyleSheet('QPushButton{background-Color:#00FA9A}')
         self.base_str.setStyleSheet('QPushButton{background-Color:#00FFFF}')
         self.str_base.setStyleSheet('QPushButton{background-Color:#00FFFF}')
         self.auth.setStyleSheet('QPushButton{background-Color:	#FF0000;background:transparent;border-width:0;border-style:outset;color:#00008B}')
         self.auth.setFont(QFont("Mongolian Baiti", 20, QFont.Bold))
+        self.cmptext1.setStyleSheet(
+            "background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
+        self.cmptext2.setStyleSheet(
+            "background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
 
         self.timer = QTimer()
         self.timer.setInterval(1000)
@@ -222,7 +257,7 @@ class Ui_Dialog(QWidget):
         ti = times+1
         self.weather(province,city,par,ti)
 
-        self.textBrowser.setText("    IP：%s   \n 来自：%s %s %s \n 邮编：%s"%(current_ip, province, city, district, adcode))
+        self.textBrowser.setText(" 来自：%s %s %s \n 邮编：%s"%( province, city, district, adcode))
 
         self.textBrowser.setFont(QFont("Mongolian Baiti",10,QFont.Bold))
         self.textBrowser.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:#9932CC")
@@ -274,6 +309,36 @@ class Ui_Dialog(QWidget):
         self.textBrowser_4.setText('💧湿度%s%%  %s %s%s级 %s '%(humidity,weather,wind_direction,wind_power,weather_short))  # 温度
         self.textBrowser_4.setFont(QFont("Mongolian Baiti", 15, QFont.Bold))
         self.textBrowser_4.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	#00008B")
+
+
+#-----------------------------------------文本比较模块--------------------------------
+    def cmp_text(self):
+        test1 = self.cmptext1.toPlainText()
+        test2 = self.cmptext2.toPlainText()
+        a = list(test1)
+        b = list(test2)
+        indexs = []
+        a_len = len(a)
+        b_len = len(b)
+
+        if a_len > b_len:
+            index_2 = range(b_len,a_len)
+            for k in index_2:
+                a[k] = "<font color='red' >" + a[k] + "</font>"
+                self.cmptext1.setHtml("".join(a))
+
+        for i, val in enumerate(a):
+            try:
+                if val != b[i]:
+                    print(val, i)
+                    indexs.append(i)
+            except:
+                pass
+
+        for k in indexs:
+
+            a[k] = "<font color='red' >"+a[k]+"</font>"
+            self.cmptext1.setHtml("".join(a))
 #--------------------------线程模块--------------------------------------------------
 class Runthread(QtCore.QThread):
     updata_date = QtCore.pyqtSignal(str)
@@ -343,4 +408,8 @@ if __name__ == '__main__':
     # ui = Ui_Dialog()
     # ui.setupUi(MainWindow)
     # MainWindow.show()
+    os.remove('01-4.jpg')
+    os.remove('01-5.jpg')
+    os.remove('mg.ico')
     sys.exit(app.exec_())
+
