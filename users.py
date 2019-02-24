@@ -72,6 +72,10 @@ class Ui_Dialog(QWidget):
         self.tabWidget.addTab(self.tab3, "")
 
 #######################################################################################
+        self.setAcceptDrops(True)
+
+
+
         self.msgBox = QMessageBox()#创建弹出框
 
         self.mongo = QtWidgets.QPushButton(self.tab)
@@ -134,8 +138,24 @@ class Ui_Dialog(QWidget):
 
         self.wx = QtWidgets.QLabel(self.tab)
         self.wx.setGeometry(QtCore.QRect(780, 90, 150, 150))
+###########################################################################################################
+        self.tab2QTextEdit = QtWidgets.QTextEdit(self.tab2)
+        self.tab2QTextEdit.setGeometry(QtCore.QRect(200, 250, 600, 500))
+        self.tab2QTextEdit.setObjectName("tab2Text")  # 转换图片
+
+        self.img_py = QtWidgets.QPushButton(self.tab2)
+        self.img_py.setGeometry(QtCore.QRect(400, 90, 200, 31))
+        self.img_py.setObjectName("pushButton")
+
+        self.tab2textBrowser = QtWidgets.QTextBrowser(self.tab2)
+        self.tab2textBrowser.setGeometry(QtCore.QRect(350, 150, 400, 31))
+        self.tab2textBrowser.setObjectName("pushButton")
+        self.tab2textBrowser.setText('文件直接拖入下面文本框，多个文件以逗号隔开')
+        self.tab2textBrowser.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:#00008B;text-align:center")
 
 
+
+######################################################################################################################
         jpg = QPixmap('01-5.jpg').scaled(self.wx.width(), self.wx.height())
         self.wx.setPixmap(jpg)
         self.wx.setStyleSheet('background:transparent;border-width:0;border-style:outset;')
@@ -203,7 +223,15 @@ class Ui_Dialog(QWidget):
         self.cmps.setText(_translate("Dialog", "文本对比"))
         self.cmps.clicked.connect(self.cmp_text)
 
+#########################################################################################################
 
+        self.img_py.setText(_translate("Dialog", "img-TO-py文件"))
+        self.img_py.clicked.connect(self.imgTopy)
+
+        self.img_py.setStyleSheet('QPushButton{background-Color:#00FFFF;border-radius: 10px;}')
+        self.tab2QTextEdit.setStyleSheet("background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
+
+ #########################################################################################################
         self.cmps.setStyleSheet('QPushButton{background-Color:#00FFFF;border-radius: 10px;}')
         self.jupy.setStyleSheet('QPushButton{background-Color:#00FA9A;border-radius: 10px;}')
         self.mongo.setStyleSheet('QPushButton{background-Color:#00FA9A;border-radius: 10px;}')
@@ -291,6 +319,29 @@ class Ui_Dialog(QWidget):
         self.textBrowser_4.setFont(QFont("Mongolian Baiti", 15, QFont.Bold))
         self.textBrowser_4.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	#00008B")
 
+    # 鼠标拖入事件
+    def imgTopy(self, evn):
+        self.setWindowTitle('鼠标拖入窗口了')
+        fiels = self.tab2QTextEdit.toPlainText()
+        files = fiels.replace('，',',')
+        file_list = files.split(',')
+        print(file_list)
+
+        write_data = []
+        for index, picture_name in enumerate(file_list):
+            if picture_name:
+                paths = picture_name.replace('file:///', '')
+                filename = "jpg_0%s" % index
+                open_pic = open("%s" % paths, 'rb')
+                b64str = base64.b64encode(open_pic.read())
+                open_pic.close()
+                # 注意这边b64str一定要加上.decode()
+                write_data.append('%s = "%s"\n' % (filename, b64str.decode()))
+
+        f = open('imgs.py' , 'w+')
+        for data in write_data:
+            f.write(data)
+        f.close()
 
 
 
