@@ -11,6 +11,8 @@ import time
 from memory_pic import jpg_4
 from memory_pic import jpg_5
 from memory_pic import mg_ico
+from memory_pic import jpg_7
+from memory_pic import jpg_8
 import requests
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer, QDateTime
@@ -37,7 +39,8 @@ img = get_pic(jpg_4, '01-4.jpg')
 # 在这里使用图片 icon.ico
 img2 = get_pic(jpg_5, '01-5.jpg')
 img_3 =get_pic(mg_ico, 'mg.ico')
-
+img_6 =get_pic(jpg_7, '01-7.jpg')
+img_7 =get_pic(jpg_8, '01-8.jpg')
 
 #######################################################################################
 
@@ -55,17 +58,18 @@ class Ui_Dialog(QWidget):
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab1")
 
-        self.tabWidget.addTab(self.tab, "")
+
         self.tabWidget.setCurrentIndex(1)
 
-        self.tab_2 = QtWidgets.QWidget()
-        self.tab_2.setObjectName("tab_2")
+        self.tab2 = QtWidgets.QWidget()
+        self.tab2.setObjectName("tab2")
 
-        self.tab_3 = QtWidgets.QWidget()
-        self.tab_3.setObjectName("tab_3")
+        self.tab3 = QtWidgets.QWidget()
+        self.tab3.setObjectName("tab3")
 
-        self.tabWidget.addTab(self.tab_2, "111")
-        self.tabWidget.addTab(self.tab_3, "111")
+        self.tabWidget.addTab(self.tab, "")
+        self.tabWidget.addTab(self.tab2, "")
+        self.tabWidget.addTab(self.tab3, "")
 
 #######################################################################################
         self.msgBox = QMessageBox()#创建弹出框
@@ -135,6 +139,7 @@ class Ui_Dialog(QWidget):
         jpg = QPixmap('01-5.jpg').scaled(self.wx.width(), self.wx.height())
         self.wx.setPixmap(jpg)
         self.wx.setStyleSheet('background:transparent;border-width:0;border-style:outset;')
+
 #---------------------------文本比较模块----------------------------------------
         self.cmptext1 = QtWidgets.QTextEdit(self.tab)
         self.cmptext1.setGeometry(QtCore.QRect(20, 350, 411, 511))
@@ -168,17 +173,19 @@ class Ui_Dialog(QWidget):
         palette.setBrush(QPalette.Background, QBrush(
             QPixmap('01-4.jpg').scaled(self.tab.width(), self.tab.height())))
 
-        Dialog.setWindowIconText('66666')
+
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "首页"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "待开发正则模块"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Dialog", "待开发"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab2), _translate("Dialog", "待开发正则模块"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab3), _translate("Dialog", "待开发"))
 
         self.tab.setStyleSheet(r'#tab1{background-image: url(01-4.jpg);}')
+        self.tab2.setStyleSheet(r'#tab2{background-image: url(01-7.jpg);}')
+        self.tab3.setStyleSheet(r'#tab3{background-image: url(01-8.jpg);}')
 
-        self.tabWidget.setStyleSheet(r'#tabWidget{border-style:outset;border-radius: 3px;background-color:green;}')
-        self.tabWidget.setStyleSheet(r'#tab1{left:0px;color:red}')
+        # self.tabWidget.setStyleSheet(r'#tabWidget{border-style:outset;border-radius: 3px;background-color:green;}')
+        # self.tabWidget.setStyleSheet(r'#tab1{left:0px;color:red}')
 
-################################################################################################
+#############################################样式模块###################################################
         self.mongo.setText(_translate("Dialog", "启动mongo"))
         self.mongo.clicked.connect(lambda:Dialog.yunxing(2,))
         self.auth.setText(_translate("Dialog", "*作者*"))
@@ -291,9 +298,12 @@ class Ui_Dialog(QWidget):
 
 
 #-----------------------------------------文本比较模块--------------------------------
+########待完善############################
     def cmp_text(self):
-        test1 = self.cmptext1.toPlainText()
-        test2 = self.cmptext2.toPlainText()
+        test1 = self.cmptext1.toPlainText().strip()
+        test2 = self.cmptext2.toPlainText().strip()
+
+
         a = list(test1)
         b = list(test2)
         indexs = []
@@ -302,22 +312,48 @@ class Ui_Dialog(QWidget):
 
         if a_len > b_len:
             index_2 = range(b_len,a_len)
-            for k in index_2:
+            for i, val in enumerate(b):
+                try:
+                    if val != a[i]:
+                        print(val, i)
+                        indexs.append(i)
+                except:
+                    pass
+            indexs.extend(index_2)
+            for k in indexs:
                 a[k] = "<font color='red' >" + a[k] + "</font>"
                 self.cmptext1.setHtml("".join(a))
 
-        for i, val in enumerate(a):
-            try:
-                if val != b[i]:
-                    print(val, i)
-                    indexs.append(i)
-            except:
-                pass
+        elif a_len < b_len:
+            print('=====')
+            index_2 = range(a_len, b_len)
 
-        for k in indexs:
+            for i, val in enumerate(a):
+                try:
+                    if val != b[i]:
+                        # print(val, i)
+                        indexs.append(i)
 
-            a[k] = "<font color='red' >"+a[k]+"</font>"
-            self.cmptext1.setHtml("".join(a))
+                except:
+                    pass
+            indexs.extend(index_2)
+            for m in indexs:
+                b[m] = "<font color='red' >" + b[m] + "</font>"
+                self.cmptext2.setHtml("".join(b))
+
+        else:
+            for i, val in enumerate(a):
+                try:
+                    if val != b[i]:
+                        # print(val, i)
+                        indexs.append(i)
+                except:
+                    pass
+
+            for k in indexs:
+
+                a[k] = "<font color='red' >"+a[k]+"</font>"
+                self.cmptext1.setHtml("".join(a))
 
 #--------------------------线程模块--------------------------------------------------
 class Runthread(QtCore.QThread):
@@ -392,5 +428,7 @@ if __name__ == '__main__':
     os.remove('01-4.jpg')
     os.remove('01-5.jpg')
     os.remove('mg.ico')
+    os.remove('01-7.jpg')
+    os.remove('01-8.jpg')
     sys.exit(app.exec_())
 
