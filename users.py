@@ -17,7 +17,7 @@ import requests
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer, QDateTime
 from PyQt5.QtGui import QIcon, QPalette, QBrush, QPixmap, QFont
-from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget, QDateTimeEdit, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget, QDateTimeEdit, QMainWindow, QLCDNumber
 
 import os
 import sys
@@ -90,12 +90,12 @@ class Ui_Dialog(QWidget):
         self.lineEdit_2.setGeometry(QtCore.QRect(10, 270, 451, 41))
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.lineEdit_2.setStyleSheet('color:#BA55D3')
-        self.lineEdit_2.setStyleSheet("background:transparent;border-width:0.5;border-style:outset;color:#BA55D3;border-color:#00008B;")
+
 
         self.lineEdit_3 = QtWidgets.QLineEdit(self.tab)
         self.lineEdit_3.setGeometry(QtCore.QRect(10, 220, 451, 41))
         self.lineEdit_3.setObjectName("lineEdit_3")
-        self.lineEdit_3.setStyleSheet("background:transparent;border-width:0.5;border-style:outset;color:#FF0000;border-color:#00008B;")
+
 
 
         self.base_str = QtWidgets.QPushButton(self.tab)
@@ -129,12 +129,22 @@ class Ui_Dialog(QWidget):
         self.auth = QtWidgets.QPushButton(self.tab)
         self.auth.setGeometry(QtCore.QRect(600, 120, 150, 40))
         self.auth.setObjectName("auth")#作者蓝
+        #
+        # self.texttime = QtWidgets.QTextBrowser(self.tab)
+        # self.texttime.setGeometry(QtCore.QRect(280, 40, 200, 50))
+        # self.texttime.setObjectName("texttime")  # 时间
 
-        self.texttime = QtWidgets.QTextBrowser(self.tab)
-        self.texttime.setGeometry(QtCore.QRect(280, 40, 200, 50))
-        self.texttime.setObjectName("texttime")  # 时间
+        self.texttime = QtWidgets.QLCDNumber(self.tab)
+        self.texttime.setGeometry(QtCore.QRect(240, 40, 500, 30))
+        self.texttime.setMouseTracking(False)
+        # self.texttime.setStyleSheet("font: italic 6pt \"Arial\";")
+        self.texttime.setDigitCount(19)
+        self.texttime.setMode(QLCDNumber.Dec)
+        self.texttime.setSegmentStyle(QLCDNumber.Flat)
+        self.texttime.setObjectName("texttime")
 
-        self.texttime.setStyleSheet('background:transparent;border-width:0;border-style:outset;color:#00008B')
+
+
 
         self.wx = QtWidgets.QLabel(self.tab)
         self.wx.setGeometry(QtCore.QRect(780, 90, 150, 150))
@@ -198,7 +208,8 @@ class Ui_Dialog(QWidget):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab2), _translate("Dialog", "待开发正则模块"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab3), _translate("Dialog", "待开发"))
 
-        self.tab.setStyleSheet(r'#tab1{background-image: url(01-4.jpg);}')
+        # self.tab.setStyleSheet(r'#tab1{background-image: url(01-4.jpg);}')
+        self.tab.setStyleSheet(r"#tab1{background-color:#696969;}")
         self.tab2.setStyleSheet(r'#tab2{background-image: url(01-7.jpg);}')
         self.tab3.setStyleSheet(r'#tab3{background-image: url(01-8.jpg);}')
 
@@ -232,17 +243,21 @@ class Ui_Dialog(QWidget):
         self.tab2QTextEdit.setStyleSheet("background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
 
  #########################################################################################################
-        self.cmps.setStyleSheet('QPushButton{background-Color:#00FFFF;border-radius: 10px;}')
-        self.jupy.setStyleSheet('QPushButton{background-Color:#00FA9A;border-radius: 10px;}')
-        self.mongo.setStyleSheet('QPushButton{background-Color:#00FA9A;border-radius: 10px;}')
-        self.base_str.setStyleSheet('QPushButton{background-Color:#00FFFF;border-radius: 10px;}')
-        self.str_base.setStyleSheet('QPushButton{background-Color:#00FFFF;border-radius: 10px;}')
-        self.auth.setStyleSheet('QPushButton{background-Color:	#FF0000;background:transparent;border-width:0;border-style:outset;color:#00008B}')
+        self.lineEdit_3.setStyleSheet(
+            "background:transparent;border-width:0.5;border-style:outset;color:#FF0000;border-color:white;")
+        self.lineEdit_2.setStyleSheet(
+            "background:transparent;border-width:0.5;border-style:outset;color:#BA55D3;border-color:white;")
+        self.cmps.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;}')
+        self.jupy.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;}')
+        self.mongo.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;}')
+        self.base_str.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;}')
+        self.str_base.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;}')
+        self.auth.setStyleSheet('QPushButton{background-Color:	#FF0000;background:transparent;border-width:0;border-style:outset;color:#87CEFA}')
         self.auth.setFont(QFont("Mongolian Baiti", 20, QFont.Bold))
         self.cmptext1.setStyleSheet(
-            "background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
+            "background:transparent;border-width:1;border-style:outset;color:white;border-color:#FFF5EE;")
         self.cmptext2.setStyleSheet(
-            "background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
+            "background:transparent;border-width:1;border-style:outset;color:white;border-color:#FFF5EE;")
 
         self.timer = QTimer()
         self.timer.setInterval(1000)
@@ -290,9 +305,10 @@ class Ui_Dialog(QWidget):
         self.dateEdit = QDateTimeEdit(QDateTime.currentDateTime(), self)
         self.dateEdit.setDisplayFormat('yyyy-MM-dd HH:mm:ss')
         test = self.dateEdit.text()
-        self.texttime.setText(test)
-
-        self.texttime.setFont(QFont("Mongolian Baiti", 11, QFont.Bold))
+        # self.texttime.setText(test)
+        self.texttime.display(test)
+        self.texttime.setStyleSheet('font: italic 6pt \"Arial\";border-width:0;border-style:outset;color:#DC143C;')
+        # self.texttime.setFont(QFont("Mongolian Baiti", 11, QFont.Bold))
 
 #--------------------------天气预报爬虫模块--------------------------------------------------
 
@@ -301,23 +317,23 @@ class Ui_Dialog(QWidget):
         self.textBrowser.setText(" 来自：%s %s %s \n 邮编：%s"%( result[0], result[1], result[2], result[3]))
 
         self.textBrowser.setFont(QFont("Mongolian Baiti",10,QFont.Bold))
-        self.textBrowser.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:#9932CC")
-        self.textBrowser_6.setText("📢 " + result[10] + "  " + result[11])
+        self.textBrowser.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:white")
+        self.textBrowser_6.setHtml("<font color='#FF8C00' >📢 💦</font>" + result[10] + "  " + result[11])
         self.textBrowser_6.setFont(QFont("Mongolian Baiti", 10, QFont.Bold))
-        self.textBrowser_6.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:#00008B")
+        self.textBrowser_6.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:white")
         # -----------------------------------------------------------------------------------------
         self.textBrowser_2.setText(" " + result[4])  # 温度
         self.textBrowser_2.setFont(QFont("Mongolian Baiti", 40, QFont.Bold))
-        self.textBrowser_2.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	#00008B")
+        self.textBrowser_2.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	white")
 
         self.textBrowser_5.setText("°")  # 温度
         self.textBrowser_5.setFont(QFont("Mongolian Baiti", 15, QFont.Bold))
-        self.textBrowser_5.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	#00008B")
+        self.textBrowser_5.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	white")
 
-        self.textBrowser_4.setText(
-            '💧湿度%s%%  %s %s%s级 %s ' % (result[5], result[7], result[8], result[6], result[9]))  # 温度
+        self.textBrowser_4.setHtml(
+            "<font color='#00008B' >💧</font> 湿度%s%%  %s %s%s级 %s " % (result[5], result[7], result[8], result[6], result[9]))  # 温度
         self.textBrowser_4.setFont(QFont("Mongolian Baiti", 15, QFont.Bold))
-        self.textBrowser_4.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	#00008B")
+        self.textBrowser_4.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	white")
 
     # 鼠标拖入事件
     def imgTopy(self, evn):
@@ -325,19 +341,22 @@ class Ui_Dialog(QWidget):
         fiels = self.tab2QTextEdit.toPlainText()
         files = fiels.replace('，',',')
         file_list = files.split(',')
-        print(file_list)
+
 
         write_data = []
-        for index, picture_name in enumerate(file_list):
-            if picture_name:
-                paths = picture_name.replace('file:///', '')
-                filename = "jpg_0%s" % index
-                open_pic = open("%s" % paths, 'rb')
-                b64str = base64.b64encode(open_pic.read())
-                open_pic.close()
-                # 注意这边b64str一定要加上.decode()
-                write_data.append('%s = "%s"\n' % (filename, b64str.decode()))
+        try:
+            for index, picture_name in enumerate(file_list):
+                if picture_name:
+                    paths = picture_name.replace('file:///', '')
+                    filename = "jpg_0%s" % index
+                    open_pic = open("%s" % paths, 'rb')
+                    b64str = base64.b64encode(open_pic.read())
+                    open_pic.close()
+                    # 注意这边b64str一定要加上.decode()
+                    write_data.append('%s = "%s"\n' % (filename, b64str.decode()))
 
+        except:
+            pass
         f = open('imgs.py' , 'w+')
         for data in write_data:
             f.write(data)
