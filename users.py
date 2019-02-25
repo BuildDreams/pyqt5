@@ -28,34 +28,48 @@ import random
 from spiders import spider_weath
 
 
-############################图片转换模块##############################################
+        ##################################################
+        # 加载全局图片资源 函数                       #
+        #                                                #
+        ##################################################
 def get_pic(pic_code, pic_name):
     image = open(pic_name, 'wb')
     image.write(base64.b64decode(pic_code))
     image.close()
     return image
 
-###################################全局图片资源######################################
+        ##################################################
+        # 加载全局图片资源                        #
+        #                                                #
+        ##################################################
 img = get_pic(jpg_4, '01-4.jpg')
 # 在这里使用图片 icon.ico
 img2 = get_pic(jpg_5, '01-5.jpg')
 img_3 =get_pic(mg_ico, 'mg.ico')
 img_6 =get_pic(jpg_7, '01-7.jpg')
 img_7 =get_pic(jpg_8, '01-8.jpg')
-img_st = get_pic(start_jpg, 'start.png')
-#######################################################################################
+img_st = get_pic(start_jpg, 'start.jpg')
+
+
+
+        ##################################################
+        # 唯一ui类                     #
+        #                                                #
+        ##################################################
 
 class Ui_Dialog(QWidget):
 
-# --------------------------ui模块--------------------------------------------------
+
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(1000, 900)
-###########################################头部控件###################################
+        Dialog.resize(1000, 950)
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
-        self.tabWidget.setGeometry(QtCore.QRect(0, 0, 1000, 900))
+        self.tabWidget.setGeometry(QtCore.QRect(0, 0, 1000, 950))
         self.tabWidget.setObjectName("tabWidget")
-
+        ##################################################
+        # c创建一个tabwidget(上方工具栏)                         #
+        #                                                #
+        ##################################################
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab1")
 
@@ -71,20 +85,20 @@ class Ui_Dialog(QWidget):
         self.tabWidget.addTab(self.tab, "")
         self.tabWidget.addTab(self.tab2, "")
         self.tabWidget.addTab(self.tab3, "")
-
-#######################################################################################
         self.setAcceptDrops(True)
 
-
-
+        ##################################################
+        # 创建一个弹出框全局变量                                   #
+        #                                                #
+        ##################################################
         self.msgBox = QMessageBox()#创建弹出框
 
         self.mongo = QtWidgets.QPushButton(self.tab)
-        self.mongo.setGeometry(QtCore.QRect(10, 40, 111, 31))
+        self.mongo.setGeometry(QtCore.QRect(10, 40, 130, 40))
         self.mongo.setObjectName("pushButton_mongo")
 
         self.jupy = QtWidgets.QPushButton(self.tab)
-        self.jupy.setGeometry(QtCore.QRect(160, 40, 111, 31))
+        self.jupy.setGeometry(QtCore.QRect(160, 40, 130, 42))
         self.jupy.setObjectName("pushButton_2")
 
         self.lineEdit_2 = QtWidgets.QLineEdit(self.tab)
@@ -112,7 +126,7 @@ class Ui_Dialog(QWidget):
         self.textBrowser.setObjectName("textBrowser")#ip栏
 
         self.textBrowser_2 = QtWidgets.QTextBrowser(self.tab)
-        self.textBrowser_2.setGeometry(QtCore.QRect(40, 80, 100, 200))
+        self.textBrowser_2.setGeometry(QtCore.QRect(15, 80, 130, 200))
         self.textBrowser_2.setObjectName("textBrowser_2")#温度
 
         self.textBrowser_4 = QtWidgets.QTextBrowser(self.tab)
@@ -126,15 +140,17 @@ class Ui_Dialog(QWidget):
         self.textBrowser_6 = QtWidgets.QTextBrowser(self.tab)
         self.textBrowser_6.setGeometry(QtCore.QRect(70, 160, 700, 50))
         self.textBrowser_6.setObjectName("textBrowser_6")  # 风向
-
+        ##################################################
+        # 作者按钮init                              #
+        #                                                #
+        ##################################################
         self.auth = QtWidgets.QPushButton(self.tab)
         self.auth.setGeometry(QtCore.QRect(600, 120, 150, 40))
         self.auth.setObjectName("auth")#作者蓝
-        #
-        # self.texttime = QtWidgets.QTextBrowser(self.tab)
-        # self.texttime.setGeometry(QtCore.QRect(280, 40, 200, 50))
-        # self.texttime.setObjectName("texttime")  # 时间
-
+        ##################################################
+        # 计时器lableui                                 #
+        #                                                #
+        ##################################################
         self.texttime = QtWidgets.QLCDNumber(self.tab)
         self.texttime.setGeometry(QtCore.QRect(240, 40, 500, 30))
         self.texttime.setMouseTracking(False)
@@ -143,13 +159,13 @@ class Ui_Dialog(QWidget):
         self.texttime.setMode(QLCDNumber.Dec)
         self.texttime.setSegmentStyle(QLCDNumber.Flat)
         self.texttime.setObjectName("texttime")
-
-
-
-
         self.wx = QtWidgets.QLabel(self.tab)
         self.wx.setGeometry(QtCore.QRect(780, 90, 150, 150))
-###########################################################################################################
+
+        ##################################################
+        # tab2按钮ui                                       #
+        #                                                #
+        ##################################################
         self.tab2QTextEdit = QtWidgets.QTextEdit(self.tab2)
         self.tab2QTextEdit.setGeometry(QtCore.QRect(200, 250, 600, 500))
         self.tab2QTextEdit.setObjectName("tab2Text")  # 转换图片
@@ -164,14 +180,17 @@ class Ui_Dialog(QWidget):
         self.tab2textBrowser.setText('文件直接拖入下面文本框，多个文件以逗号隔开')
         self.tab2textBrowser.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:#00008B;text-align:center")
 
-
-
-######################################################################################################################
+        ##################################################
+        # 作者按钮ui                                       #
+        #                                                #
+        ##################################################
         jpg = QPixmap('01-5.jpg').scaled(self.wx.width(), self.wx.height())
         self.wx.setPixmap(jpg)
         self.wx.setStyleSheet('background:transparent;border-width:0;border-style:outset;')
-
-#---------------------------文本比较模块----------------------------------------
+        ##################################################
+        # 文本对比按钮ui                                   #
+        #                                                #
+        ##################################################
         self.cmptext1 = QtWidgets.QTextEdit(self.tab)
         self.cmptext1.setGeometry(QtCore.QRect(20, 350, 411, 511))
         self.cmptext1.setObjectName("cmptext1")
@@ -183,19 +202,18 @@ class Ui_Dialog(QWidget):
         self.cmps = QtWidgets.QPushButton(self.tab)
         self.cmps.setGeometry(QtCore.QRect(440, 600, 93, 28))
         self.cmps.setObjectName("cmps")
-
-
-
+        ##################################################
+        # 挂载到主界面                                     #
+        #                                                #
+        ##################################################
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.retranslateUi(Dialog)
 
-
-
-
-
-
-############################定义事件模块#####################################
+    ##################################################
+    # 自定义样式、点击事件模块                           #
+    #                                                #
+    ##################################################
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "小工具"))
@@ -209,7 +227,13 @@ class Ui_Dialog(QWidget):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab2), _translate("Dialog", "待开发正则模块"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab3), _translate("Dialog", "待开发"))
 
-        # self.tab.setStyleSheet(r'#tab1{background-image: url(01-4.jpg);}')
+
+        self.tabWidget.setStyleSheet(
+            "QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border:2px;border-style: outset;color:white;margin:3px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
+
+
+
+        # self.tabWidget.setStyleSheet("QTabBar::tab:first:selected{background-color: white;}")  # 有问题
         self.tab.setStyleSheet(r"#tab1{background-color:#696969;}")
         self.tab2.setStyleSheet(r'#tab2{background-image: url(01-7.jpg);}')
         self.tab3.setStyleSheet(r'#tab3{background-image: url(01-8.jpg);}')
@@ -217,26 +241,27 @@ class Ui_Dialog(QWidget):
         # self.tabWidget.setStyleSheet(r'#tabWidget{border-style:outset;border-radius: 3px;background-color:green;}')
         # self.tabWidget.setStyleSheet(r'#tab1{left:0px;color:red}')
 
-#############################################样式模块###################################################
+        ##################################################
+        # tab1按钮模块 样式 事件                                       #
+        #                                                #
+        ##################################################
         self.mongo.setText(_translate("Dialog", "mongo"))
         icon = QIcon()
 
-        icon.addPixmap(QPixmap("start.png"), QIcon.Normal, QIcon.Off)
+        icon.addPixmap(QPixmap("start.jpg"), QIcon.Normal, QIcon.Off)
 
         self.mongo.setIcon(icon)
 
         self.mongo.setIconSize(QtCore.QSize(60, 30))
         self.mongo.setAutoRepeatDelay(200)
-        # self.mongo.setIcon(QIcon(r"‪C:\Users\zq\Desktop\Project\ceshi\111.png"))
-
         self.mongo.clicked.connect(lambda:Dialog.yunxing(2,))
+
         self.auth.setText(_translate("Dialog", "*作者*"))
         self.auth.clicked.connect(self.auth_qq)
 
         self.jupy.setIcon(icon)
         self.jupy.setIconSize(QtCore.QSize(60, 30))
         self.jupy.setAutoRepeatDelay(200)
-
         self.jupy.setText(_translate("Dialog", "jupyter"))
         self.jupy.clicked.connect(lambda:Dialog.yunxing(1,))
 
@@ -249,24 +274,32 @@ class Ui_Dialog(QWidget):
         self.cmps.setText(_translate("Dialog", "文本对比"))
         self.cmps.clicked.connect(self.cmp_text)
 
-#########################################################################################################
 
+        ##################################################
+        # tab2模块                                       #
+        #                                                #
+        ##################################################
         self.img_py.setText(_translate("Dialog", "img-TO-py文件"))
         self.img_py.clicked.connect(self.imgTopy)
 
-        # self.img_py.setStyleSheet('QPushButton{background-Color:#00FFFF;border-radius: 10px;}')
         self.tab2QTextEdit.setStyleSheet("background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
 
- #########################################################################################################
+
+        ##################################################
+        # 样式模块                                       #
+        #                                                #
+        ##################################################
         self.lineEdit_3.setStyleSheet(
             "background:transparent;border-width:0.5;border-style:outset;color:#FF0000;border-color:white;")
         self.lineEdit_2.setStyleSheet(
             "background:transparent;border-width:0.5;border-style:outset;color:#BA55D3;border-color:white;")
-        self.cmps.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}')
-        self.jupy.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}')
-        self.mongo.setStyleSheet('#pushButton_mongo{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}')
-        self.base_str.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}')
-        self.str_base.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}')
+        self.cmps.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+        self.jupy.setStyleSheet('QPushButton{background-Color:white;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+        self.mongo.setStyleSheet('#pushButton_mongo{background-Color:white;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+        self.base_str.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+        # self.base_str.setStyleSheet("")
+
+        self.str_base.setStyleSheet('QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
         self.auth.setStyleSheet('QPushButton{background-Color:	#FF0000;background:transparent;border-width:0;border-style:outset;color:#87CEFA}')
         self.auth.setFont(QFont("Mongolian Baiti", 20, QFont.Bold))
         self.cmptext1.setStyleSheet(
@@ -274,17 +307,30 @@ class Ui_Dialog(QWidget):
         self.cmptext2.setStyleSheet(
             "background:transparent;border-width:1;border-style:outset;color:white;border-color:#FFF5EE;")
 
+##################################################
+# 计时器模块                                       #
+#                                                #
+##################################################
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.showtime)
-
         self.timer.start()
+
+
+################################################################################
+# 初始调用爬虫模块
+#
+##################################################################################
         self.run_spider()
 #--------------------------作者函数--------------------------------------------------
     def auth_qq(self):
         QMessageBox.question(self, 'waring', '仅供学习使用',
                              QMessageBox.Yes, QMessageBox.Yes)
 
+################################################################################
+#两个转码函数
+#
+##################################################################################
 
     def b64_str(self):
         """
@@ -316,6 +362,11 @@ class Ui_Dialog(QWidget):
 
         self.lineEdit_3.setText((b64_str).decode('utf-8'))
 
+
+################################################################################
+#计时器函数
+#
+##################################################################################
     def showtime(self):
         self.dateEdit = QDateTimeEdit(QDateTime.currentDateTime(), self)
         self.dateEdit.setDisplayFormat('yyyy-MM-dd HH:mm:ss')
@@ -325,8 +376,12 @@ class Ui_Dialog(QWidget):
         self.texttime.setStyleSheet('font: italic 6pt \"Arial\";border-width:0;border-style:outset;color:#DC143C;')
         # self.texttime.setFont(QFont("Mongolian Baiti", 11, QFont.Bold))
 
-#--------------------------天气预报爬虫模块--------------------------------------------------
 
+
+################################################################################
+#天气预报爬虫样式运行模块
+#
+##################################################################################
     def run_spider(self):
         result = spider_weath()
         self.textBrowser.setHtml(" &nbsp;<font color='red' >📍 &nbsp;</font>：%s %s %s \n <font color='blue' >🔜 &nbsp;</font>：%s"%( result[0], result[1], result[2], result[3]))
@@ -382,8 +437,11 @@ class Ui_Dialog(QWidget):
 
 
 
-#-----------------------------------------文本比较模块--------------------------------
-########待完善############################
+
+################################################################################
+#待完善
+#
+##################################################################################
     def cmp_text(self):
         test1 = self.cmptext1.toPlainText().strip()
         test2 = self.cmptext2.toPlainText().strip()
@@ -440,7 +498,11 @@ class Ui_Dialog(QWidget):
                 a[k] = "<font color='red' >"+a[k]+"</font>"
                 self.cmptext1.setHtml("".join(a))
 
-#--------------------------线程模块--------------------------------------------------
+
+################################################################################
+#自定义多线程模块
+#
+##################################################################################
 class Runthread(QtCore.QThread):
     updata_date = QtCore.pyqtSignal(str)
 
@@ -470,7 +532,10 @@ class Runthread(QtCore.QThread):
 
 
 
-
+################################################################################
+#自定义启动线程
+#
+##################################################################################
 class MyCalc(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -503,10 +568,10 @@ class MyCalc(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
-
-    # app.setStyleSheet('MainWindow{background-color:blue}')
+    MainWindow.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
     win = MyCalc()
     win.show()
+
     # ui = Ui_Dialog()
     # ui.setupUi(MainWindow)
     # MainWindow.show()
@@ -515,6 +580,6 @@ if __name__ == '__main__':
     os.remove('mg.ico')
     os.remove('01-7.jpg')
     os.remove('01-8.jpg')
-    os.remove('start.png')
+    os.remove('start.jpg')
     sys.exit(app.exec_())
 
