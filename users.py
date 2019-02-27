@@ -79,8 +79,8 @@ class Ui_Dialog(QWidget):
 
         self.tabWidget.setCurrentIndex(1)
 
-        self.tab2 = QtWidgets.QWidget()
-        self.tab2.setObjectName("tab2")
+        # self.tab2 = QtWidgets.QWidget()
+        # self.tab2.setObjectName("tab2")
 
         self.tab3 = QtWidgets.QWidget()
         self.tab3.setObjectName("tab3")
@@ -89,7 +89,7 @@ class Ui_Dialog(QWidget):
         self.tab4.setObjectName("tab4")
 
         self.tabWidget.addTab(self.tab, "")
-        self.tabWidget.addTab(self.tab2, "")
+        # self.tabWidget.addTab(self.tab2, "")
         self.tabWidget.addTab(self.tab3, "")
         self.tabWidget.addTab(self.tab4, "")
         self.setAcceptDrops(True)
@@ -170,21 +170,21 @@ class Ui_Dialog(QWidget):
         # tab2按钮ui                                       #
         #                                                #
         ##################################################
-        self.tab2QTextEdit = QtWidgets.QTextEdit(self.tab2)
-        self.tab2QTextEdit.setGeometry(QtCore.QRect(200, 250, 600, 500))
-        self.tab2QTextEdit.setObjectName("tab2Text")  # 转换图片
+        # self.tab2QTextEdit = QtWidgets.QTextEdit(self.tab2)
+        # self.tab2QTextEdit.setGeometry(QtCore.QRect(200, 250, 600, 500))
+        # self.tab2QTextEdit.setObjectName("tab2Text")  # 转换图片
+        #
+        # self.img_py = QtWidgets.QPushButton(self.tab2)
+        # self.img_py.setGeometry(QtCore.QRect(400, 90, 200, 31))
+        # self.img_py.setObjectName("pushButton")
 
-        self.img_py = QtWidgets.QPushButton(self.tab2)
-        self.img_py.setGeometry(QtCore.QRect(400, 90, 200, 31))
-        self.img_py.setObjectName("pushButton")
-
-        self.tab2textBrowser = QtWidgets.QTextBrowser(self.tab2)
-        self.tab2textBrowser.setGeometry(QtCore.QRect(350, 150, 400, 31))
-        self.tab2textBrowser.setObjectName("pushButton")
-        self.tab2textBrowser.setText('文件直接拖入下面文本框，多个文件以逗号隔开')
-        self.tab2textBrowser.setStyleSheet(
-            "background:transparent;border-width:0;border-style:outset;color:#00008B;text-align:center")
-
+        # self.tab2textBrowser = QtWidgets.QTextBrowser(self.tab2)
+        # self.tab2textBrowser.setGeometry(QtCore.QRect(350, 150, 400, 31))
+        # self.tab2textBrowser.setObjectName("pushButton")
+        # self.tab2textBrowser.setText('文件直接拖入下面文本框，多个文件以逗号隔开')
+        # self.tab2textBrowser.setStyleSheet(
+        #     "background:transparent;border-width:0;border-style:outset;color:#00008B;text-align:center")
+        #
         ##################################################
         # 作者按钮ui                                       #
         #                                                #
@@ -234,6 +234,15 @@ class Ui_Dialog(QWidget):
         self.tab4_brower4.setGeometry(QtCore.QRect(300, 30, 500, 120))
         self.tab4_brower4.setObjectName("tab4_brower4")
 
+        self.img_py = QtWidgets.QPushButton(self.tab4)
+        self.img_py.setObjectName("img_py")
+        self.img_py.setText("img-->py")
+        self.img_py.setGeometry(QtCore.QRect(50, 360, 200, 40))
+
+        self.tab4_brower_img = QtWidgets.QTextBrowser(self.tab4)
+        self.tab4_brower_img.setGeometry(QtCore.QRect(300, 320, 500, 120))
+        self.tab4_brower_img.setObjectName("tab4_brower_img")
+
         ##################################################
         # 挂载到主界面                                     #
         #                                                #
@@ -256,16 +265,16 @@ class Ui_Dialog(QWidget):
             QPixmap('01-4.jpg').scaled(self.tab.width(), self.tab.height())))
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "首页"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab2), _translate("Dialog", "待开发正则模块"))
+        # self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab2), _translate("Dialog", "待开发正则模块"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab3), _translate("Dialog", "pdf转换为text"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab4), _translate("Dialog", "pdf转换为word"))
 
         self.tabWidget.setStyleSheet(
-            "QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border:2px;border-style: outset;color:white;margin:0px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
+            "QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border:2px;border-style: outset;color:white;margin:2px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
 
         # self.tabWidget.setStyleSheet("QTabBar::tab:first:selected{background-color: white;}")  # 有问题
         self.tab.setStyleSheet(r"#tab1{background-color:#696969;}")
-        self.tab2.setStyleSheet(r'#tab2{background-image: url(01-7.jpg);}')
+        # self.tab2.setStyleSheet(r'#tab2{background-image: url(01-7.jpg);}')
         # self.tab3.setStyleSheet(r'#tab3{background-image: url(01-8.jpg);}')
 
         self.tab3.setStyleSheet(r'#tab3{background-color:#696969;}')
@@ -307,11 +316,11 @@ class Ui_Dialog(QWidget):
         # tab2模块                                       #
         #                                                #
         ##################################################
-        self.img_py.setText(_translate("Dialog", "img-TO-py文件"))
-        self.img_py.clicked.connect(self.imgTopy)
+        # self.img_py.setText(_translate("Dialog", "img-TO-py文件"))
+        # self.img_py.clicked.connect(self.imgTopy)
 
-        self.tab2QTextEdit.setStyleSheet(
-            "background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
+        # self.tab2QTextEdit.setStyleSheet(
+        #     "background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
 
         ##################################################
         # 样式模块                                       #
@@ -362,6 +371,14 @@ class Ui_Dialog(QWidget):
 
         self.tab4_brower4.setStyleSheet(
             "background:transparent;border-width:1;border-style:outset;color:#FF8C00;border-color:white;font-size:15px;")
+
+        self.img_py.setStyleSheet(
+            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+        self.img_py.clicked.connect(self.imgTopy)
+
+        self.tab4_brower_img.setStyleSheet(
+            "background:transparent;border-width:1;border-style:outset;color:#FF8C00;border-color:white;font-size:15px;")
+
 
         ##################################################
         # 计时器模块                                       #
@@ -466,36 +483,41 @@ class Ui_Dialog(QWidget):
         self.textBrowser_4.setFont(QFont("Mongolian Baiti", 15, QFont.Bold))
         self.textBrowser_4.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:	white")
 
-    # 鼠标拖入事件
+    ################################################################################
+    # 图片转换模块
+    #
+    ##################################################################################
     def imgTopy(self, evn):
-        self.setWindowTitle('鼠标拖入窗口了')
-        fiels = self.tab2QTextEdit.toPlainText()
-        files = fiels.replace('，', ',')
-        file_list = files.split(',')
+        self.tab4_brower_img.clear()
+        QMessageBox.question(self, 'waring', '将在当前目录生成pics.py文件',
+                             QMessageBox.Yes, QMessageBox.Yes)
 
-        write_data = []
-        try:
-            for index, picture_name in enumerate(file_list):
-                if picture_name:
-                    paths = picture_name.replace('file:///', '')
-                    filename = "jpg_0%s" % index
-                    open_pic = open("%s" % paths, 'rb')
-                    b64str = base64.b64encode(open_pic.read())
-                    open_pic.close()
-                    # 注意这边b64str一定要加上.decode()
-                    write_data.append('%s = "%s"\n' % (filename, b64str.decode()))
+        py_name = 'pics'
+        files, filetype = QFileDialog.getOpenFileNames(self,
+                                                       "选择文件",
+                                                       self.cwd,  # 起始路径
+                                                       "JPG Files (*.jpg);;PNG Files (*.png);;GIF Files (*.gif);;ICO Files (*.ico);;")
+        if len(files) == 0:
+            return
+        print(len(files))
+        for inx,file in enumerate(files):
+            (file_path, tempfilename) = os.path.split(file)
+            (filename, extension) = os.path.splitext(tempfilename)
+            open_pic = open("%s" % file, 'rb')
+            b64str = base64.b64encode(open_pic.read())
+            open_pic.close()
+            # 注意这边b64str一定要加上.decode()
+            sy = len(files) - inx-1
+            with open('%s.py' % py_name, 'a+') as f:
+                f.write('%s = "%s"\n' % (filename, b64str.decode()))
 
-        except:
-            pass
-        f = open('imgs.py', 'w+')
-        for data in write_data:
-            f.write(data)
-        f.close()
+            self.tab4_brower_img.append("<font color='red' >"+"正在处理:"+tempfilename+ "</font>"+"<br />"+"当前剩余:%s张"%sy)
 
     ##################################################################################
     # 选择文件模块
     ##################################################################################
     def slot_btn_chooseMutiFile(self):
+        self.textbrower3.clear()
         files, filetype = QFileDialog.getOpenFileNames(self,
                                                        "选择文件",
                                                        self.cwd,  # 起始路径
@@ -509,14 +531,14 @@ class Ui_Dialog(QWidget):
         for file in files:
             texts = readPDF(file)
             self.textbrower3.append(texts + "-" * 122)
-            # print(file)
-        # print("文件筛选器类型: ", filetype)
+
 
     ##################################################################################
     # 运行转换为word模块
     ##################################################################################
 
     def run_pdf_parse(self):
+        self.tab4_brower4.clear()
         files, filetype = QFileDialog.getOpenFileNames(self,
                                                        "选择文件",
                                                        self.cwd,  # 起始路径
