@@ -15,10 +15,10 @@ from memory_pic import start_jpg
 from pdf_str import readPDF
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QTimer, QDateTime, QUrl
-from PyQt5.QtGui import QIcon, QPalette, QBrush, QPixmap, QFont
+from PyQt5.QtCore import QTimer, QDateTime, QUrl, QEvent
+from PyQt5.QtGui import QIcon, QPalette, QBrush, QPixmap, QFont, QColor
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget, QDateTimeEdit, QMainWindow, QLCDNumber, QDesktopWidget, \
-    QFileDialog
+    QFileDialog, QAction, QMenu, QSystemTrayIcon
 
 import os
 import sys
@@ -65,11 +65,15 @@ class Ui_Dialog(QWidget):
         # Dialog.resize(1000, 950)
 
         Dialog.setGeometry(400, 50, 1000, 950)
+        # Dialog.setFixedSize(self.width(), self.height())
+
         self.cwd = os.getcwd()
         self.center()
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(0, 0, 1000, 950))
         self.tabWidget.setObjectName("tabWidget")
+
+
         ##################################################
         # c创建一个tabwidget(上方工具栏)                         #
         #                                                #
@@ -243,10 +247,19 @@ class Ui_Dialog(QWidget):
         self.tab4_brower_img.setGeometry(QtCore.QRect(300, 320, 500, 120))
         self.tab4_brower_img.setObjectName("tab4_brower_img")
 
+        self.winIconPix = QPixmap(16, 16)
+
+        self.setWindowIcon(QIcon('mg.ico'))
+
+        self.tray = QSystemTrayIcon(Dialog)
+        self.trayIconPix = QPixmap(16, 16)
+        self.tray.setIcon(QIcon('mg.ico'))
+
         ##################################################
         # 挂载到主界面                                     #
         #                                                #
         ##################################################
+
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.retranslateUi(Dialog)
@@ -440,6 +453,7 @@ class Ui_Dialog(QWidget):
 
         self.lineEdit_3.setText((b64_str).decode('utf-8'))
 
+
     ################################################################################
     # 计时器函数
     #
@@ -459,6 +473,8 @@ class Ui_Dialog(QWidget):
     ##################################################################################
     def run_spider(self):
         result = spider_weath()
+        QMessageBox.question(self, 'HI', '来自 %s %s %s的你,你好吖！'%(result[0], result[1], result[2]),
+                             QMessageBox.Yes, QMessageBox.Yes)
         self.textBrowser.setHtml(
             " &nbsp;<font color='red' >📍 &nbsp;</font>：%s %s %s \n <font color='blue' >🔜 &nbsp;</font>：%s" % (
             result[0], result[1], result[2], result[3]))
@@ -620,6 +636,7 @@ class Ui_Dialog(QWidget):
                 self.cmptext1.setHtml("".join(a))
 
 
+
 ################################################################################
 # 自定义多线程模块
 #
@@ -659,6 +676,26 @@ class MyCalc(QWidget):
         super().__init__(parent)
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
+        #############################################################################
+        #设置系统托盘
+        # minimizeAction = QAction("Mi&nimize", self, triggered=self.hide)
+        # maximizeAction = QAction("Ma&ximize", self, triggered=self.showMaximized)
+        restoreAction = QAction("&还原", self, triggered=self.showNormal)
+        quitAction = QAction("&退出", self, triggered=QApplication.instance().quit)  # 退出APP
+        self.trayMenu = QMenu(self)
+        # self.trayMenu.addAction(minimizeAction)
+        # self.trayMenu.addAction(maximizeAction)
+        self.trayMenu.addAction(restoreAction)
+        self.trayMenu.addSeparator()
+        self.trayMenu.addAction(quitAction)
+        self.ui.tray.setContextMenu(self.trayMenu)
+        ########################################################
+############################################
+#忽略退出按钮
+###########################################
+    def closeEvent(self, event):
+        event.ignore()  # 忽略关闭事件
+        self.hide()  # 隐藏窗体
 
     def yunxing(self, *args):
         #
@@ -679,6 +716,8 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     # MainWindow.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+    # MainWindow.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+    # MainWindow.setWindowFlags(Qt::FramelessWindowHint)
     win = MyCalc()
     win.show()
 
