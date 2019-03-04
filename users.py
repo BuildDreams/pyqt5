@@ -6,24 +6,24 @@
 #
 # WARNING! All changes made in this file will be lost!
 from pdf_word import parser_pdfs
-from memory_pic import jpg_4
-from memory_pic import jpg_5
 from memory_pic import mg_ico
-from memory_pic import jpg_7
-from memory_pic import jpg_8
 from memory_pic import start_jpg
+from memory_pic import jpg_5
 from pdf_str import readPDF
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QTimer, QDateTime, QUrl, QEvent
-from PyQt5.QtGui import QIcon, QPalette, QBrush, QPixmap, QFont, QColor
-from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget, QDateTimeEdit, QMainWindow, QLCDNumber, QDesktopWidget, \
-    QFileDialog, QAction, QMenu, QSystemTrayIcon
 
+
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtCore import QTimer, QDateTime
+from PyQt5.QtGui import QIcon,  QPixmap, QFont
+from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget, QDateTimeEdit, QMainWindow, QLCDNumber, QDesktopWidget, \
+    QFileDialog, QAction, QMenu, QSystemTrayIcon, QHBoxLayout
+
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 import os
 import sys
 import base64
-import random
+
 
 from spiders import spider_weath
 
@@ -44,29 +44,37 @@ def get_pic(pic_code, pic_name):
     ##################################################
 
 
-img = get_pic(jpg_4, '01-4.jpg')
+
 # 在这里使用图片 icon.ico
-img2 = get_pic(jpg_5, '01-5.jpg')
+
 img_3 = get_pic(mg_ico, 'mg.ico')
-img_6 = get_pic(jpg_7, '01-7.jpg')
-img_7 = get_pic(jpg_8, '01-8.jpg')
+img_st = get_pic(jpg_5, '01-5.jpg')
 img_st = get_pic(start_jpg, 'start.jpg')
 
 
+
+
+
+
 ##################################################
-# 唯一ui类                     #
+# 唯一ui类                                        #
 #                                                #
 ##################################################
 
 class Ui_Dialog(QWidget):
-
+    windowList = []
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         # Dialog.resize(1000, 950)
 
         Dialog.setGeometry(400, 50, 1000, 950)
+
         # Dialog.setFixedSize(self.width(), self.height())
 
+        Dialog.setWindowOpacity(0.9)  # 设置窗口透明度
+        # Dialog.setWindowFlag(QtCore.Qt.FramelessWindowHint)  # 隐藏边框
+        Dialog.setStyleSheet("#Dialog{background:gray;border-top:1px solid white;border-bottom:1px solid white;border-left:1px solid white;border-top-left-radius:10px;border-bottom-left-radius:10px;}")
+        # Dialog.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # 设置窗口背景透明
         self.cwd = os.getcwd()
         self.center()
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
@@ -83,19 +91,21 @@ class Ui_Dialog(QWidget):
 
         self.tabWidget.setCurrentIndex(1)
 
-        # self.tab2 = QtWidgets.QWidget()
-        # self.tab2.setObjectName("tab2")
-
         self.tab3 = QtWidgets.QWidget()
         self.tab3.setObjectName("tab3")
 
         self.tab4 = QtWidgets.QWidget()
         self.tab4.setObjectName("tab4")
 
+        self.tab5 = QWebEngineView ()
+        self.tab5.setObjectName("tab5")
+
         self.tabWidget.addTab(self.tab, "")
-        # self.tabWidget.addTab(self.tab2, "")
         self.tabWidget.addTab(self.tab3, "")
         self.tabWidget.addTab(self.tab4, "")
+        self.tabWidget.addTab(self.tab5, "")
+
+        self.tabWidget.setDocumentMode(True)
         self.setAcceptDrops(True)
 
         ##################################################
@@ -141,28 +151,23 @@ class Ui_Dialog(QWidget):
         self.textBrowser_4.setGeometry(QtCore.QRect(110, 110, 630, 111))
         self.textBrowser_4.setObjectName("textBrowser_4")  # 符号
 
-        # self.textBrowser_5 = QtWidgets.QTextBrowser(self.tab)
-        # self.textBrowser_5.setGeometry(QtCore.QRect(75, 80, 41, 41))
-        # self.textBrowser_5.setObjectName("textBrowser_5")#温度符号
-
         self.textBrowser_6 = QtWidgets.QTextBrowser(self.tab)
         self.textBrowser_6.setGeometry(QtCore.QRect(70, 160, 700, 50))
         self.textBrowser_6.setObjectName("textBrowser_6")  # 风向
         ##################################################
-        # 作者按钮init                              #
+        # 作者按钮init                                     #
         #                                                #
         ##################################################
         self.auth = QtWidgets.QPushButton(self.tab)
         self.auth.setGeometry(QtCore.QRect(600, 120, 150, 40))
         self.auth.setObjectName("auth")  # 作者蓝
         ##################################################
-        # 计时器lableui                                 #
+        # 计时器lableui                                   #
         #                                                #
         ##################################################
         self.texttime = QtWidgets.QLCDNumber(self.tab)
         self.texttime.setGeometry(QtCore.QRect(240, 40, 500, 30))
         self.texttime.setMouseTracking(False)
-        # self.texttime.setStyleSheet("font: italic 6pt \"Arial\";")
         self.texttime.setDigitCount(19)
         self.texttime.setMode(QLCDNumber.Dec)
         self.texttime.setSegmentStyle(QLCDNumber.Flat)
@@ -170,25 +175,6 @@ class Ui_Dialog(QWidget):
         self.wx = QtWidgets.QLabel(self.tab)
         self.wx.setGeometry(QtCore.QRect(780, 90, 150, 150))
 
-        ##################################################
-        # tab2按钮ui                                       #
-        #                                                #
-        ##################################################
-        # self.tab2QTextEdit = QtWidgets.QTextEdit(self.tab2)
-        # self.tab2QTextEdit.setGeometry(QtCore.QRect(200, 250, 600, 500))
-        # self.tab2QTextEdit.setObjectName("tab2Text")  # 转换图片
-        #
-        # self.img_py = QtWidgets.QPushButton(self.tab2)
-        # self.img_py.setGeometry(QtCore.QRect(400, 90, 200, 31))
-        # self.img_py.setObjectName("pushButton")
-
-        # self.tab2textBrowser = QtWidgets.QTextBrowser(self.tab2)
-        # self.tab2textBrowser.setGeometry(QtCore.QRect(350, 150, 400, 31))
-        # self.tab2textBrowser.setObjectName("pushButton")
-        # self.tab2textBrowser.setText('文件直接拖入下面文本框，多个文件以逗号隔开')
-        # self.tab2textBrowser.setStyleSheet(
-        #     "background:transparent;border-width:0;border-style:outset;color:#00008B;text-align:center")
-        #
         ##################################################
         # 作者按钮ui                                       #
         #                                                #
@@ -248,12 +234,12 @@ class Ui_Dialog(QWidget):
         self.tab4_brower_img.setObjectName("tab4_brower_img")
 
         self.winIconPix = QPixmap(16, 16)
-
         self.setWindowIcon(QIcon('mg.ico'))
-
         self.tray = QSystemTrayIcon(Dialog)
         self.trayIconPix = QPixmap(16, 16)
         self.tray.setIcon(QIcon('mg.ico'))
+#################################################################################################
+
 
         ##################################################
         # 挂载到主界面                                     #
@@ -273,17 +259,17 @@ class Ui_Dialog(QWidget):
         Dialog.setWindowTitle(_translate("Dialog", "小工具"))
         # Dialog.setStyleSheet("#Dialog{background-color:red;}")
         Dialog.setWindowIcon(QIcon('mg.ico'))
-        palette = QPalette()
-        palette.setBrush(QPalette.Background, QBrush(
-            QPixmap('01-4.jpg').scaled(self.tab.width(), self.tab.height())))
+        # palette = QPalette()
+        # palette.setBrush(QPalette.Background, QBrush(
+        #     QPixmap('01-4.jpg').scaled(self.tab.width(), self.tab.height())))
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "首页"))
-        # self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab2), _translate("Dialog", "待开发正则模块"))
+        # self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab5), _translate("Dialog", "浏览器"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab3), _translate("Dialog", "pdf转换为text"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab4), _translate("Dialog", "pdf转换为word"))
 
         self.tabWidget.setStyleSheet(
-            "QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border:2px;border-style: outset;color:white;margin:2px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
+            "QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border-bottom-left-radius:20px;border:2px;border-style: inner;color:white;margin:2px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
 
         # self.tabWidget.setStyleSheet("QTabBar::tab:first:selected{background-color: white;}")  # 有问题
         self.tab.setStyleSheet(r"#tab1{background-color:#696969;}")
@@ -324,16 +310,6 @@ class Ui_Dialog(QWidget):
 
         self.cmps.setText(_translate("Dialog", "文本对比"))
         self.cmps.clicked.connect(self.cmp_text)
-
-        ##################################################
-        # tab2模块                                       #
-        #                                                #
-        ##################################################
-        # self.img_py.setText(_translate("Dialog", "img-TO-py文件"))
-        # self.img_py.clicked.connect(self.imgTopy)
-
-        # self.tab2QTextEdit.setStyleSheet(
-        #     "background:transparent;border-width:1;border-style:outset;color:black;border-color:blue;")
 
         ##################################################
         # 样式模块                                       #
@@ -555,10 +531,7 @@ class Ui_Dialog(QWidget):
 
     def run_pdf_parse(self):
         self.tab4_brower4.clear()
-        files, filetype = QFileDialog.getOpenFileNames(self,
-                                                       "选择文件",
-                                                       self.cwd,  # 起始路径
-                                                       "PDF Files (*.pdf);;")
+        files, filetype = QFileDialog.getOpenFileNames(self,"选择文件",self.cwd,"PDF Files (*.pdf);;")
 
         if len(files) == 0:
             # print("\n取消选择")
@@ -637,6 +610,7 @@ class Ui_Dialog(QWidget):
 
 
 
+
 ################################################################################
 # 自定义多线程模块
 #
@@ -712,6 +686,7 @@ class MyCalc(QWidget):
         pass
 
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
@@ -724,10 +699,8 @@ if __name__ == '__main__':
     # ui = Ui_Dialog()
     # ui.setupUi(MainWindow)
     # MainWindow.show()
-    os.remove('01-4.jpg')
-    os.remove('01-5.jpg')
+
     os.remove('mg.ico')
-    os.remove('01-7.jpg')
-    os.remove('01-8.jpg')
     os.remove('start.jpg')
+    os.remove('01-5.jpg')
     sys.exit(app.exec_())
