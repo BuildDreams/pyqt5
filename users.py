@@ -69,11 +69,13 @@ class Ui_Dialog(QWidget):
 
         Dialog.setGeometry(400, 50, 1000, 950)
 
-        # Dialog.setFixedSize(self.width(), self.height())
+        # Dialog.setDisabled(False)
 
-        Dialog.setWindowOpacity(0.9)  # 设置窗口透明度
+        Dialog.setWindowOpacity(0.85)  # 设置窗口透明度
         # Dialog.setWindowFlag(QtCore.Qt.FramelessWindowHint)  # 隐藏边框
-        Dialog.setStyleSheet("#Dialog{background:gray;border-top:1px solid white;border-bottom:1px solid white;border-left:1px solid white;border-top-left-radius:10px;border-bottom-left-radius:10px;}")
+        # Dialog.setDisabled(True)
+        # Dialog.WindowMinimizeButtonHint()
+        Dialog.setStyleSheet("#Dialog{background:red;border-top:1px solid white;border-bottom:1px solid white;border-left:1px solid white;border-top-left-radius:10px;border-bottom-left-radius:10px;}")
         # Dialog.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # 设置窗口背景透明
         self.cwd = os.getcwd()
         self.center()
@@ -97,7 +99,7 @@ class Ui_Dialog(QWidget):
         self.tab4 = QtWidgets.QWidget()
         self.tab4.setObjectName("tab4")
 
-        self.tab5 = QWebEngineView ()
+        self.tab5 = QtWidgets.QWidget()
         self.tab5.setObjectName("tab5")
 
         self.tabWidget.addTab(self.tab, "")
@@ -109,7 +111,7 @@ class Ui_Dialog(QWidget):
         self.setAcceptDrops(True)
 
         ##################################################
-        # 创建一个弹出框全局变量                                   #
+        # 创建一个弹出框全局变量                             #
         #                                                #
         ##################################################
         self.msgBox = QMessageBox()  # 创建弹出框
@@ -239,7 +241,13 @@ class Ui_Dialog(QWidget):
         self.trayIconPix = QPixmap(16, 16)
         self.tray.setIcon(QIcon('mg.ico'))
 #################################################################################################
+        self.js = QtWidgets.QPushButton(self.tab5)
+        self.js.setGeometry(QtCore.QRect(80, 40, 130, 42))
+        self.js.setObjectName("js")
 
+        self.ht = QtWidgets.QPushButton(self.tab5)
+        self.ht.setGeometry(QtCore.QRect(260, 40, 130, 42))
+        self.ht.setObjectName("ht")
 
         ##################################################
         # 挂载到主界面                                     #
@@ -267,17 +275,20 @@ class Ui_Dialog(QWidget):
         # self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab5), _translate("Dialog", "浏览器"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab3), _translate("Dialog", "pdf转换为text"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab4), _translate("Dialog", "pdf转换为word"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab5), _translate("Dialog", "tools"))
+
 
         self.tabWidget.setStyleSheet(
-            "QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border-bottom-left-radius:20px;border:2px;border-style: inner;color:white;margin:2px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
+            "QTabBar{background-color:#333300;}QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border-radius:20px;border:2px;border-style: inner;color:white;margin:2px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
 
         # self.tabWidget.setStyleSheet("QTabBar::tab:first:selected{background-color: white;}")  # 有问题
-        self.tab.setStyleSheet(r"#tab1{background-color:#696969;}")
+        self.tab.setStyleSheet(r"#tab1{background-color:#012456;}")
         # self.tab2.setStyleSheet(r'#tab2{background-image: url(01-7.jpg);}')
         # self.tab3.setStyleSheet(r'#tab3{background-image: url(01-8.jpg);}')
 
-        self.tab3.setStyleSheet(r'#tab3{background-color:#696969;}')
-        self.tab4.setStyleSheet(r'#tab4{background-color:#696969;}')
+        self.tab3.setStyleSheet('#tab3{background-color:#012456;}')
+        self.tab4.setStyleSheet('#tab4{background-color:#012456;}')
+        self.tab5.setStyleSheet('#tab5{background-color:#012456;}')
         ##################################################
         # tab1按钮模块 样式 事件                            #
         #                                                #
@@ -367,8 +378,16 @@ class Ui_Dialog(QWidget):
 
         self.tab4_brower_img.setStyleSheet(
             "background:transparent;border-width:1;border-style:outset;color:#FF8C00;border-color:white;font-size:15px;")
+#####################################################################################################################
+        self.js.setText(_translate("Dialog", "计算器"))
+        self.js.setStyleSheet(
+            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+        self.js.clicked.connect(lambda: Dialog.yunxing(3, ))
 
-
+        self.ht.setText(_translate("Dialog", "画图"))
+        self.ht.setStyleSheet(
+            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+        self.ht.clicked.connect(lambda: Dialog.yunxing(4, ))
         ##################################################
         # 计时器模块                                       #
         #                                                #
@@ -491,7 +510,7 @@ class Ui_Dialog(QWidget):
                                                        "JPG Files (*.jpg);;PNG Files (*.png);;GIF Files (*.gif);;ICO Files (*.ico);;")
         if len(files) == 0:
             return
-        print(len(files))
+        # print(len(files))
         for inx,file in enumerate(files):
             (file_path, tempfilename) = os.path.split(file)
             (filename, extension) = os.path.splitext(tempfilename)
@@ -628,6 +647,11 @@ class Runthread(QtCore.QThread):
         elif self.st[0] == 2:
             self.run_mongo()
 
+        elif self.st[0] == 3:
+            self.run_js()
+        elif self.st[0] == 4:
+            self.run_ht()
+
     def run_junpyter(self):
         """
         jupyter
@@ -639,6 +663,19 @@ class Runthread(QtCore.QThread):
 
     def run_mongo(self):
         os.system('mongod --dbpath d:\data\db')
+
+
+    def run_js(self):
+        """
+        jupyter
+        :param starts:
+        :return:
+        """
+        starts = 'calc'
+        os.system(starts)
+
+    def run_ht(self):
+        os.system('mspaint')
 
 
 ################################################################################
