@@ -17,9 +17,9 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer, QDateTime
 from PyQt5.QtGui import QIcon,  QPixmap, QFont
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget, QDateTimeEdit, QMainWindow, QLCDNumber, QDesktopWidget, \
-    QFileDialog, QAction, QMenu, QSystemTrayIcon, QHBoxLayout
+    QFileDialog, QAction, QMenu, QSystemTrayIcon
 
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+
 import os
 import sys
 import base64
@@ -82,7 +82,7 @@ class Ui_Dialog(QWidget):
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(0, 0, 1000, 950))
         self.tabWidget.setObjectName("tabWidget")
-
+        # QTableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
 
         ##################################################
         # c创建一个tabwidget(上方工具栏)                         #
@@ -92,9 +92,11 @@ class Ui_Dialog(QWidget):
         self.tab.setObjectName("tab1")
 
         self.tabWidget.setCurrentIndex(1)
+        # self.tabWidget.showNormal()
 
         self.tab3 = QtWidgets.QWidget()
         self.tab3.setObjectName("tab3")
+        # self.tab3.setLayout(self.tabWidget)
 
         self.tab4 = QtWidgets.QWidget()
         self.tab4.setObjectName("tab4")
@@ -249,6 +251,11 @@ class Ui_Dialog(QWidget):
         self.ht.setGeometry(QtCore.QRect(260, 40, 130, 42))
         self.ht.setObjectName("ht")
 
+        self.scp = QtWidgets.QTextBrowser(self.tab5)
+        self.scp.setGeometry(QtCore.QRect(16, 160, 700, 500))
+        self.scp.setObjectName("scp")
+        
+
         ##################################################
         # 挂载到主界面                                     #
         #                                                #
@@ -277,15 +284,16 @@ class Ui_Dialog(QWidget):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab4), _translate("Dialog", "pdf转换为word"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab5), _translate("Dialog", "tools"))
 
-
+        "QTabBar::tab{min-height: 30px; min-width: 80px;border-top-right-radius:20px;border-radius:20px;}"
         self.tabWidget.setStyleSheet(
-            "QTabBar{background-color:#333300;}QTabBar::tab{padding:15px;border-bottom-color:#C2C7CB;border-top-right-radius:20px;border-radius:20px;border:2px;border-style: inner;color:white;margin:2px;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;color:green;}")
+            "QTabBar{background-color:#333300;outline:solid 2px;}QTabBar::tab{border-bottom-color:#C2C7CB;min-width: "
+            "150px;border-right:2px solid black;border-style: outset;min-height: 40px;"
+            "color:white;background-color:#4169E1;}QTabBar::tab:selected{background-color: white;"
+            "color:green;border-top-right-radius:10px;border-top-left-radius:10px;border:none}QTabBar::tab:first{margin-left:10px;}"
+            "QTabBar::tab:hover:!selected{color:red;background-color:black;}")
 
         # self.tabWidget.setStyleSheet("QTabBar::tab:first:selected{background-color: white;}")  # 有问题
-        self.tab.setStyleSheet(r"#tab1{background-color:#012456;}")
-        # self.tab2.setStyleSheet(r'#tab2{background-image: url(01-7.jpg);}')
-        # self.tab3.setStyleSheet(r'#tab3{background-image: url(01-8.jpg);}')
-
+        self.tab.setStyleSheet("#tab1{background-color:#012456;}")
         self.tab3.setStyleSheet('#tab3{background-color:#012456;}')
         self.tab4.setStyleSheet('#tab4{background-color:#012456;}')
         self.tab5.setStyleSheet('#tab5{background-color:#012456;}')
@@ -331,19 +339,19 @@ class Ui_Dialog(QWidget):
         self.lineEdit_2.setStyleSheet(
             "background:transparent;border-width:0.5;border-style:outset;color:#BA55D3;border-color:white;")
         self.cmps.setStyleSheet(
-            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color:red;background-color:black;}')
         self.jupy.setStyleSheet(
-            'QPushButton{background-Color:white;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+            'QPushButton{background-Color:white;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red;}')
         self.mongo.setStyleSheet(
-            '#pushButton_mongo{background-Color:white;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+            '#pushButton_mongo{background-Color:white;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color:red}')
         self.base_str.setStyleSheet(
-            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color:red;background-color:black;}')
         # self.base_str.setStyleSheet("")
 
         self.str_base.setStyleSheet(
-            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color:red;background-color:black;}')
         self.auth.setStyleSheet(
-            'QPushButton{background-Color:	#FF0000;background:transparent;border-width:0;border-style:outset;color:#87CEFA}')
+            'QPushButton{background-Color:	#FF0000;background:transparent;border-width:0;border-style:outset;color:#87CEFA}QPushButton:hover{color: red;}')
         self.auth.setFont(QFont("Mongolian Baiti", 20, QFont.Bold))
         self.cmptext1.setStyleSheet(
             "background:transparent;border-width:1;border-style:outset;color:white;border-color:#FFF5EE;")
@@ -386,7 +394,7 @@ class Ui_Dialog(QWidget):
 
         self.ht.setText(_translate("Dialog", "画图"))
         self.ht.setStyleSheet(
-            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red}')
+            'QPushButton{background-Color:#7FFF00;border-radius: 10px;border: 2px solid green;}QPushButton:hover{color: red};background-attachment:scroll;')
         self.ht.clicked.connect(lambda: Dialog.yunxing(4, ))
         ##################################################
         # 计时器模块                                       #
@@ -395,7 +403,15 @@ class Ui_Dialog(QWidget):
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.showtime)
+
         self.timer.start()
+
+        # self.timer1 = QTimer()
+        # self.timer1.setInterval(1000)
+        # # self.timer1.timeout.connect(self.showtime)
+        # self.timer1.timeout.connect(self.scp_r)
+        # self.timer1.start()
+
 
         ################################################################################
         # 初始调用爬虫模块
@@ -461,6 +477,27 @@ class Ui_Dialog(QWidget):
         self.texttime.display(test)
         self.texttime.setStyleSheet('font: italic 6pt \"Arial\";border-width:0;border-style:outset;color:#DC143C;')
         # self.texttime.setFont(QFont("Mongolian Baiti", 11, QFont.Bold))
+
+
+
+    # def scp_r(self):
+    #
+    #     aqs = "于我而言，你是淌过摩尔曼斯克的暖流，亦是填满亚马逊坳陷的长河。"
+    #     all_len  = len(aqs)
+    #
+    #     self.scp.setText(aqs[0:self.inx])
+    #     self.inx +=1
+    #     if self.inx == all_len-1:
+    #         self.inx = 0
+    #         self.scp.setText(aqs+" "*self.inx)
+    #         self.inx += 1
+
+        # print(self.inx)
+        # print(aqs[0:self.inx])
+        # self.inx +=1
+        # if self.inx+1 == all_len:
+        #     self.inx=0
+
 
     ################################################################################
     # 天气预报爬虫样式运行模块
