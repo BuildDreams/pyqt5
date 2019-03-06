@@ -10,14 +10,18 @@ from memory_pic import mg_ico
 from memory_pic import start_jpg
 from memory_pic import jpg_5
 from pdf_str import readPDF
-
-
+from get_ip import get_host_ip
+from cs1 import html
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QTimer, QDateTime
 from PyQt5.QtGui import QIcon,  QPixmap, QFont
 from PyQt5.QtWidgets import QApplication, QMessageBox, QWidget, QDateTimeEdit, QMainWindow, QLCDNumber, QDesktopWidget, \
     QFileDialog, QAction, QMenu, QSystemTrayIcon
+
+from PyQt5.QtCore import QUrl
+
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
 import os
@@ -71,7 +75,7 @@ class Ui_Dialog(QWidget):
 
         # Dialog.setDisabled(False)
 
-        Dialog.setWindowOpacity(0.85)  # 设置窗口透明度
+        Dialog.setWindowOpacity(0.95)  # 设置窗口透明度
         # Dialog.setWindowFlag(QtCore.Qt.FramelessWindowHint)  # 隐藏边框
         # Dialog.setDisabled(True)
         # Dialog.WindowMinimizeButtonHint()
@@ -251,10 +255,17 @@ class Ui_Dialog(QWidget):
         self.ht.setGeometry(QtCore.QRect(260, 40, 130, 42))
         self.ht.setObjectName("ht")
 
-        self.scp = QtWidgets.QTextBrowser(self.tab5)
-        self.scp.setGeometry(QtCore.QRect(16, 160, 700, 500))
-        self.scp.setObjectName("scp")
-        
+        self.browser = QWebEngineView(self.tab5)  # 新增一个浏览器引擎
+        self.browser.setWindowTitle('QWebChannel交互Demo')
+
+        with open("cs6.html","w",encoding="utf-8") as f:
+            f.write(html)
+
+        url_string = "file:///cs6.html"  # 内置的网页地址，此处我采用的是本地的。远程同样可以使用。
+        self.browser.load(QUrl(url_string))
+        # self.browser.(html)
+        self.browser.resize(530, 280)
+        self.browser.setStyleSheet("background:transparent;border-width:1;border-style:outset;color:white;border-color:#FFF5EE;background-color:#012456;")
 
         ##################################################
         # 挂载到主界面                                     #
@@ -480,23 +491,6 @@ class Ui_Dialog(QWidget):
 
 
 
-    # def scp_r(self):
-    #
-    #     aqs = "于我而言，你是淌过摩尔曼斯克的暖流，亦是填满亚马逊坳陷的长河。"
-    #     all_len  = len(aqs)
-    #
-    #     self.scp.setText(aqs[0:self.inx])
-    #     self.inx +=1
-    #     if self.inx == all_len-1:
-    #         self.inx = 0
-    #         self.scp.setText(aqs+" "*self.inx)
-    #         self.inx += 1
-
-        # print(self.inx)
-        # print(aqs[0:self.inx])
-        # self.inx +=1
-        # if self.inx+1 == all_len:
-        #     self.inx=0
 
 
     ################################################################################
@@ -505,11 +499,13 @@ class Ui_Dialog(QWidget):
     ##################################################################################
     def run_spider(self):
         result = spider_weath()
+        ip = get_host_ip()
         QMessageBox.question(self, 'HI', '来自 %s %s %s的你,你好吖！'%(result[0], result[1], result[2]),
                              QMessageBox.Yes, QMessageBox.Yes)
         self.textBrowser.setHtml(
-            " &nbsp;<font color='red' >📍 &nbsp;</font>：%s %s %s \n <font color='blue' >🔜 &nbsp;</font>：%s" % (
-            result[0], result[1], result[2], result[3]))
+            " &nbsp;<font color='red' >📍&nbsp;</font>：%s %s %s <br /> <font color='#FF8C00' >&nbsp;➤&nbsp;</font>：%s <br /> &nbsp;"
+            "<font color='#FF4500' >☎&nbsp;</font>：%s" % (
+            result[0], result[1], result[2], result[3],ip))
 
         self.textBrowser.setFont(QFont("Mongolian Baiti", 10, QFont.Bold))
         self.textBrowser.setStyleSheet("background:transparent;border-width:0;border-style:outset;color:white")
@@ -773,7 +769,7 @@ if __name__ == '__main__':
     # ui = Ui_Dialog()
     # ui.setupUi(MainWindow)
     # MainWindow.show()
-
+    os.remove('cs6.html')
     os.remove('mg.ico')
     os.remove('start.jpg')
     os.remove('01-5.jpg')
